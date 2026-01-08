@@ -1,0 +1,256 @@
+PROMPT — Build a client-only React + Tailwind UI for a KG + Primary School Management System
+
+Overview / Goal
+- Build a client-only UI (no backend/server logic or real network connections). Use mock data (local JSON or mocked API using MSW) for all pages and interactions.
+- Tech stack: React (v18+), TailwindCSS, React Router, Headless UI / shadcn (optional), lucide-react for icons. Optional: zustand or React Context for lightweight state.
+- Fully responsive (mobile → tablet → desktop) and accessible (keyboard, ARIA). Desktop-first admin UX but mobile-friendly for parents/teachers.
+- Provide a clean component library, pages for each grouped feature (see list below), and well-documented mock data & README.
+- Use modern UI/UX: cards, tables, modals, tooltips, toasts, skeleton loaders, empty states, inline edits, and subtle animations (Framer Motion optional).
+
+Project deliverables
+1. A runnable React project (create-react-app, Vite, or Next.js is fine) with Tailwind configured.
+2. A README.md explaining how to run, switch roles (Admin/Teacher/Bursar/Parent), and replace mock data with real APIs.
+3. Reusable component library (/src/components) — Button, Input, Modal, Table, Tooltip, Avatar, Card, FormField, Badge, Breadcrumb, Pagination, CSV export button, PDF export stub.
+4. Pages for each feature (see Page List). Each page uses mock data and demonstrates full UI flows.
+5. Mock data in /src/mock/*.json and a simple mock service worker (MSW) or useMockData() hook to simulate network latency and CRUD actions.
+6. Tailwind design tokens (colors, spacing, typography) in tailwind.config.js.
+7. Accessibility checks: keyboard focus, aria labels, color contrast.
+8. A short design spec file (/docs/ui-spec.md) explaining key components, spacing, breakpoints, and interactions.
+9. Optional: Storybook or Component Playground (nice to have).
+
+Role simulation
+- Include a role switcher in the header for previewing Admin, Head Teacher, Teacher, Bursar, Parent views. This is UI-only and driven by local app state.
+
+Pages (one page per grouped feature + details & behaviors)
+Build the following pages. Each page should include mock data and demonstrate actions (create/edit/delete/filters) performed locally.
+
+1. Dashboard (Admin)
+- Summary cards: total students, active KG pupils, primary pupils, fees collected (term), attendance today %, overdue fees.
+- Charts: small bar for fee collection per term; line chart for attendance trend (use Chart.js or simple SVG).
+- Recent activity feed (user actions from mock data).
+- Quick actions: Add Student, Create Fee, Create Notice.
+
+2. Students (List page)
+- Table with columns: Photo, Admission No., Full name, Level (KG/Primary), Grade, Stream, DOB (age), Parent contact, Status, Actions.
+- Features: search, filter by level/grade/stream/status, sort, bulk actions (promote, export CSV), pagination.
+- Row actions: View Profile, Edit, Promote, Deactivate.
+- Empty state design (invite to add first student).
+
+3. Student Profile (Tabbed)
+- Tabs: Overview (biodata), Parents/Guardians, Attendance, Assessments (KG remarks + Primary marks), Fees.
+- Overview: show photo, admission no., basic info, emergency contacts, medical notes (optional).
+- Parents: list linked parents with contact buttons (phone/email placeholders).
+- Attendance tab: calendar-style summary and monthly breakdown; ability to view and export attendance.
+- Assessments tab:
+  - KG: term-based descriptive remarks (behavior, motor, language). A UI for teachers to add/edit remarks with templates and tooltips.
+  - Primary: list exams and subjects; show marks table, auto-computed grade & comment based on grading rules from settings. Allow inline edit.
+- Fees tab: show fee structure assigned, payments history, outstanding balance, printable receipt button (client-only).
+
+4. Parents Page
+- List of parents, search/filter, view linked students.
+- Parent profile page: contact details and linked children. Action: simulate sending notice (UI only).
+
+5. My Classes (Teacher view)
+- Shows teacher’s assigned classes/grades and students per class.
+- Attendance quick mark UI (presence toggle, bulk present/absent).
+- Marks entry UI with validation. For Primary show subject columns; for KG show a textarea for remarks per pupil.
+- UX: keyboard shortcuts for moving between students, autosave indicator, validation errors in tooltips.
+
+6. Academics Setup
+- Manage Levels (KG/Primary), Grades, Streams (only for Primary), Subjects.
+- Drag & drop or reorder grades (order_no).
+- Assign subjects to grades and assign teachers to subjects (UI-only dropdown of mock teachers).
+- Validation: disallow creating a stream for KG (show contextual tooltip).
+
+7. Assessments (Exams & Marks)
+- Create exam (term, name, year), select grade & subjects.
+- Marks entry grid, save & preview report card.
+- Grading rules table (editable, see Settings).
+- Bulk import via CSV (client-only parse & seed).
+
+8. Attendance
+- Daily attendance UI by grade/stream.
+- Attendance reports: filters date range, export CSV.
+- Heatmap view for class attendance over term.
+
+9. Fees Module
+- Fee Structures: create/edit structures per level/grade & term.
+- Student Payments: record a mock payment (cash, bank, mobile money).
+- Student balances and payment history view.
+- Bursar dashboard: overdue list, receipts (client-only printable), filters.
+- Client-side invoice/receipt generator (HTML → print).
+
+10. Reports
+- Generate and preview PDF-style report cards, attendance summaries, fees collection. Use client-side libs (html2pdf/jsPDF stubs, show how to export).
+- Filtering and export buttons (CSV / PDF).
+
+11. Notices / Communication
+- Create announcement UI, target audiences (All, Grade, Parents only).
+- Notification preview modal; show how SMS/email placeholders appear.
+- Announcements feed on Dashboard and Parent portal.
+
+12. Users (User & Staff Management)
+- CRUD for users (Admin): create teacher, bursar, head teacher, parent accounts.
+- Role & permission UI: checkboxes for module access (visual only).
+- Bulk invite (mock email send).
+
+13. Settings (Comprehensive)
+- General settings
+  - School name, address, logo upload (client-only), contact email/phone, term dates (start/end), academic year dropdown.
+- Appearance
+  - Theme: light/dark toggle, primary color (school brand), font size adjustment.
+- Academic settings
+  - Levels configuration (add custom levels), grade ordering, default subjects for levels.
+- Grading rules
+  - Editable table mapping score ranges → grade → comment (applies to Primary). Include "KG behavior templates" for remarks.
+- Fees & Payment settings
+  - Default payment methods (Cash, Bank, MTN MoMo, Airtel Money), currency symbol, tax/discount rules.
+- Notifications
+  - Toggle SMS/email, mock provider config (text input fields), default notification templates.
+- Security
+  - Password policy (min length, complexity), session timeout (UI), 2FA toggle (UI placeholder).
+- Data
+  - Export data (CSV): students, parents, payments, attendance. Backup / restore mock toggle (client-only).
+- Integrations (Placeholder)
+  - Toggles for external services (SMS provider, payment gateway) with sample integration info fields.
+- Permissions
+  - Visual role permissions editor: matrix mapping roles → modules (checkboxes). Changing these should change the role switching behavior client-side.
+
+UI / UX Design details & patterns
+- Layout
+  - Sidebar navigation with icons and labels on desktop; collapsible; on mobile show bottom nav or slide-out drawer.
+  - Page header with breadcrumbs, role switcher, global search, and quick-add dropdown.
+  - Use a grid system: 12-column for desktop, stacked for mobile. Breakpoints: sm(640px), md(768px), lg(1024px), xl(1280px).
+- Components
+  - Tables: sortable columns, column resize optional, inline actions, highlight row on hover, keyboard navigation, accessible table semantics.
+  - Forms: grouped fields, clear validation messages, client-side validation rules (required, formats), smart defaults.
+  - Tooltips: accessible (aria-describedby), show on hover and focus, with short explanations (e.g., "KG remarks are descriptive only").
+  - Modals: use focus trap, escape to close, role-trap for keyboard.
+  - Toasts: success/error/confirmations using an accessible live region.
+  - Empty & loading states: skeletons for lists, illustrated empty states for no data.
+  - Inline edit: small pencil icon to toggle editable state.
+- Microinteractions
+  - Subtle hover transitions, loading spinners, autosave indicator (dot/pulse), confirmation dialogs for destructive actions.
+- Accessibility
+  - All interactive elements keyboard accessible, visible focus states, ARIA labels on forms, color contrast ratio >= 4.5:1 for text.
+- Design system
+  - Typography scale, spacing scale (4/8/16 baseline), color tokens (primary, secondary, success, danger, warning, bg, muted).
+  - Provide CSS variables or Tailwind theme config for tokens.
+
+Mock Data (must include these JSON files with example records)
+Include realistic sample records to test all flows.
+
+/src/mock/levels.json
+[
+  {"id": "kg", "name": "Kindergarten", "code": "KG"},
+  {"id": "primary", "name": "Primary", "code": "PRI"}
+]
+
+/src/mock/grades.json
+[
+  {"id":"baby","level_id":"kg","name":"Baby","order":1},
+  {"id":"middle","level_id":"kg","name":"Middle","order":2},
+  {"id":"top","level_id":"kg","name":"Top","order":3},
+  {"id":"p1","level_id":"primary","name":"P1","order":1},
+  {"id":"p2","level_id":"primary","name":"P2","order":2}
+]
+
+/src/mock/students.json
+[
+  {"id":"s001","admission_no":"ADM001","first_name":"Aisha","last_name":"Kato","level_id":"kg","grade_id":"baby","stream_id":null,"dob":"2020-05-12","gender":"F","status":"active","photo":"/placeholder.png"},
+  {"id":"s002","admission_no":"ADM002","first_name":"James","last_name":"Okello","level_id":"primary","grade_id":"p2","stream_id":"Blue","dob":"2016-11-30","gender":"M","status":"active","photo":"/placeholder.png"}
+]
+
+/src/mock/parents.json
+[
+  {"id":"p001","first_name":"Grace","last_name":"Kato","phone":"+256712345678","email":"grace@example.com","students":["s001"]}
+]
+
+/src/mock/subjects.json
+[
+  {"id":"sub01","name":"English","level_id":"primary"},
+  {"id":"sub02","name":"Mathematics","level_id":"primary"},
+  {"id":"sub03","name":"Phonics","level_id":"kg"}
+]
+
+/src/mock/exams.json
+[
+  {"id":"ex2026mid","name":"Mid-Term 2026","term":"Mid","year":2026,"level_id":"primary"}
+]
+
+/src/mock/marks.json
+[
+  {"id":"m1","student_id":"s002","subject_id":"sub01","exam_id":"ex2026mid","score":78}
+]
+
+/src/mock/attendance.json
+[
+  {"id":"a1","student_id":"s001","date":"2026-01-07","status":"present"},
+  {"id":"a2","student_id":"s002","date":"2026-01-07","status":"absent"}
+]
+
+/src/mock/fees.json
+[
+  {"id":"fee_p1_term1","level_id":"primary","grade_id":"p1","term":"1","amount":200000}
+]
+
+/src/mock/payments.json
+[
+  {"id":"pay001","student_id":"s002","amount":100000,"method":"Mobile Money","reference":"MM123","date":"2026-01-06"}
+]
+
+File / Route structure suggestion
+/src
+  /components
+    Button.jsx, Input.jsx, Modal.jsx, Table.jsx, Tooltip.jsx, Avatar.jsx, Card.jsx
+  /pages
+    Dashboard.jsx
+    Students/
+      StudentsList.jsx
+      StudentProfile.jsx
+    Parents.jsx
+    MyClasses.jsx
+    AcademicsSetup.jsx
+    Assessments.jsx
+    Attendance.jsx
+    Fees.jsx
+    Reports.jsx
+    Notices.jsx
+    Users.jsx
+    Settings.jsx
+  /routes
+    AppRoutes.jsx
+  /context
+    AuthContext.jsx
+    RoleContext.jsx
+  /mock
+    levels.json, grades.json, students.json, ...
+  /utils
+    exportCsv.js, dateUtils.js, validators.js
+  /hooks
+    useMockApi.js, useToast.js
+  index.jsx
+  tailwind.config.js
+
+Behavior / Acceptance criteria
+- All pages present realistic mock data and demonstrate full UI behaviors locally (create/edit/delete simulated).
+- Role switcher changes visible menu & permitted actions in the UI (no security enforcement needed beyond UI).
+- KG-specific UIs: KG assessments use remarks textareas; Primary uses numeric marks + auto-grade based on settings.
+- Forms validate inputs and show accessible error messages.
+- Tables support search, filter, and pagination UI.
+- Export (CSV/PDF) features work client-side and download a file.
+- Visual polish: spacing, consistent color tokens, icons, and tooltips for complex UI elements.
+- README explains how to replace mock data with real API endpoints (e.g., how to swap useMockApi with fetch and example endpoint mappings).
+
+Optional nice-to-haves (call out to the agent)
+- Use MSW (Mock Service Worker) to simulate realistic API calls and latency.
+- Include Storybook or a component playground for components.
+- Include light/dark theme persistent in localStorage.
+- Add example unit tests for a couple of core components (Jest + React Testing Library).
+
+Final instructions for the AI agent
+- Do not create or call any real backend. Everything must be client only.
+- Use Tailwind utility classes for styling and keep components modular and reusable.
+- Provide clear comments in code for places where real API integration would happen.
+- Write a concise README.md with run instructions, how to switch roles, and how to seed or edit mock data.
+- Deliver high-fidelity, production-lean UI code that can be handed to frontend engineers or used directly for demos.
