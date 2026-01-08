@@ -1,0 +1,7 @@
+[
+  {"id":"baby","level_id":"kg","name":"Baby","order":1},
+  {"id":"middle","level_id":"kg","name":"Middle","order":2},
+  {"id":"top","level_id":"kg","name":"Top","order":3},
+  {"id":"p1","level_id":"primary","name":"P1","order":1},
+  {"id":"p2","level_id":"primary","name":"P2","order":2}
+]

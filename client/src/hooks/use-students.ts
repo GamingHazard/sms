@@ -1,16 +1,29 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, buildUrl, type InsertStudent } from "@shared/routes";
-import { z } from "zod";
+// Local lightweight student type for client-only mock flows.
+type InsertStudent = {
+  id?: string;
+  admission_no?: string;
+  first_name?: string;
+  last_name?: string;
+  level_id?: string;
+  grade_id?: string;
+  stream_id?: string | null;
+  dob?: string;
+  gender?: string;
+  status?: string;
+  photo?: string;
+  [key: string]: any;
+};
 import { useToast } from "@/hooks/use-toast";
+import { mockApi } from "@/lib/mockApi";
 
 // Fetch all students
 export function useStudents() {
   return useQuery({
-    queryKey: [api.students.list.path],
+    queryKey: ["api.students.list.path"],
     queryFn: async () => {
-      const res = await fetch(api.students.list.path, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch students");
-      return api.students.list.responses[200].parse(await res.json());
+      // use mock API for client-only demo
+      return await mockApi.list("students");
     },
   });
 }
@@ -18,13 +31,9 @@ export function useStudents() {
 // Fetch single student
 export function useStudent(id: number) {
   return useQuery({
-    queryKey: [api.students.get.path, id],
+    queryKey: ["api.students.get.path", id],
     queryFn: async () => {
-      const url = buildUrl(api.students.get.path, { id });
-      const res = await fetch(url, { credentials: "include" });
-      if (res.status === 404) return null;
-      if (!res.ok) throw new Error("Failed to fetch student");
-      return api.students.get.responses[200].parse(await res.json());
+      return await mockApi.get("students", String(id));
     },
     enabled: !!id,
   });
@@ -37,24 +46,13 @@ export function useCreateStudent() {
 
   return useMutation({
     mutationFn: async (data: InsertStudent) => {
-      const res = await fetch(api.students.create.path, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-
-      if (!res.ok) {
-        if (res.status === 400) {
-          const error = api.students.create.responses[400].parse(await res.json());
-          throw new Error(error.message);
-        }
-        throw new Error("Failed to create student");
-      }
-      return api.students.create.responses[201].parse(await res.json());
+      // simple id generation
+      const id = `s${Date.now().toString().slice(-6)}`;
+      const item = { id, ...data } as any;
+      return await mockApi.create("students", item);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [api.students.list.path] });
+      queryClient.invalidateQueries({ queryKey: ["api.students.list.path"] });
       toast({ title: "Success", description: "Student enrolled successfully" });
     },
     onError: (err) => {
@@ -70,20 +68,11 @@ export function useUpdateStudent() {
 
   return useMutation({
     mutationFn: async ({ id, ...updates }: { id: number } & Partial<InsertStudent>) => {
-      const url = buildUrl(api.students.update.path, { id });
-      const res = await fetch(url, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updates),
-        credentials: "include",
-      });
-
-      if (!res.ok) throw new Error("Failed to update student");
-      return api.students.update.responses[200].parse(await res.json());
+      return await mockApi.update("students", String(id), updates as any);
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: [api.students.list.path] });
-      queryClient.invalidateQueries({ queryKey: [api.students.get.path, variables.id] });
+      queryClient.invalidateQueries({ queryKey: ["api.students.list.path"] });
+      queryClient.invalidateQueries({ queryKey: ["api.students.get.path", variables.id] });
       toast({ title: "Success", description: "Student updated successfully" });
     },
   });
@@ -96,12 +85,10 @@ export function useDeleteStudent() {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      const url = buildUrl(api.students.delete.path, { id });
-      const res = await fetch(url, { method: "DELETE", credentials: "include" });
-      if (!res.ok) throw new Error("Failed to delete student");
+      await mockApi.remove("students", String(id));
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [api.students.list.path] });
+      queryClient.invalidateQueries({ queryKey: ["api.students.list.path"] });
       toast({ title: "Deleted", description: "Student record removed" });
     },
   });

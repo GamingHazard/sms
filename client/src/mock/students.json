@@ -1,0 +1,4 @@
+[
+  {"id":"s001","admission_no":"ADM001","first_name":"Aisha","last_name":"Kato","level_id":"kg","grade_id":"baby","stream_id":null,"dob":"2020-05-12","gender":"F","status":"active","photo":"/placeholder.png"},
+  {"id":"s002","admission_no":"ADM002","first_name":"James","last_name":"Okello","level_id":"primary","grade_id":"p2","stream_id":"Blue","dob":"2016-11-30","gender":"M","status":"active","photo":"/placeholder.png"}
+]

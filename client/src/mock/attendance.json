@@ -1,0 +1,4 @@
+[
+  {"id":"a1","student_id":"s001","date":"2026-01-07","status":"present"},
+  {"id":"a2","student_id":"s002","date":"2026-01-07","status":"absent"}
+]

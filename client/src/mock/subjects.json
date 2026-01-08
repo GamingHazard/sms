@@ -1,0 +1,5 @@
+[
+  {"id":"sub01","name":"English","level_id":"primary"},
+  {"id":"sub02","name":"Mathematics","level_id":"primary"},
+  {"id":"sub03","name":"Phonics","level_id":"kg"}
+]

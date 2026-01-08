@@ -1,16 +1,130 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, type InsertAttendance, type InsertExam, type InsertMark } from "@shared/routes";
 import { useToast } from "@/hooks/use-toast";
+import { mockApi } from "@/lib/mockApi";
+
+type AcademicYear = {
+  id: string;
+  name: string;
+  start_date: string;
+  end_date: string;
+  is_active: boolean;
+};
+
+type Term = {
+  id: string;
+  academic_year_id: string;
+  name: string;
+  start_date: string;
+  end_date: string;
+  is_active: boolean;
+};
+
+type Attendance = {
+  id: string;
+  student_id: string;
+  date: string;
+  status: string;
+};
+
+type Exam = {
+  id: string;
+  name: string;
+  term: string;
+  year: number;
+  level_id: string;
+};
+
+type Mark = {
+  id: string;
+  student_id: string;
+  subject_id: string;
+  exam_id: string;
+  score: number;
+};
+
+// --- ACADEMIC YEARS ---
+export function useAcademicYears() {
+  return useQuery({
+    queryKey: ["academic_years"],
+    queryFn: async () => await mockApi.list("academic_years"),
+  });
+}
+
+export function useCreateAcademicYear() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (data: Omit<AcademicYear, "id">) => {
+      const id = `ay_${Date.now()}`;
+      return await mockApi.create("academic_years", { id, ...data });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["academic_years"] });
+      toast({ title: "Success", description: "Academic year created" });
+    },
+  });
+}
+
+export function useUpdateAcademicYear() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: { id: string } & Partial<AcademicYear>) => {
+      return await mockApi.update("academic_years", id, updates);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["academic_years"] });
+      toast({ title: "Success", description: "Academic year updated" });
+    },
+  });
+}
+
+// --- TERMS ---
+export function useTerms() {
+  return useQuery({
+    queryKey: ["terms"],
+    queryFn: async () => await mockApi.list("terms"),
+  });
+}
+
+export function useCreateTerm() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (data: Omit<Term, "id">) => {
+      const id = `t_${Date.now()}`;
+      return await mockApi.create("terms", { id, ...data });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["terms"] });
+      toast({ title: "Success", description: "Term created" });
+    },
+  });
+}
+
+export function useUpdateTerm() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: { id: string } & Partial<Term>) => {
+      return await mockApi.update("terms", id, updates);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["terms"] });
+      toast({ title: "Success", description: "Term updated" });
+    },
+  });
+}
 
 // --- ATTENDANCE ---
 export function useAttendance() {
   return useQuery({
-    queryKey: [api.attendance.list.path],
-    queryFn: async () => {
-      const res = await fetch(api.attendance.list.path, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch attendance");
-      return api.attendance.list.responses[200].parse(await res.json());
-    },
+    queryKey: ["attendance"],
+    queryFn: async () => await mockApi.list("attendance"),
   });
 }
 
@@ -19,18 +133,12 @@ export function useMarkAttendance() {
   const { toast } = useToast();
 
   return useMutation({
-    mutationFn: async (data: InsertAttendance) => {
-      const res = await fetch(api.attendance.mark.path, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to mark attendance");
-      return api.attendance.mark.responses[201].parse(await res.json());
+    mutationFn: async (data: Omit<Attendance, "id">) => {
+      const id = `a_${Date.now()}`;
+      return await mockApi.create("attendance", { id, ...data });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [api.attendance.list.path] });
+      queryClient.invalidateQueries({ queryKey: ["attendance"] });
       toast({ title: "Success", description: "Attendance recorded" });
     },
   });
@@ -39,11 +147,23 @@ export function useMarkAttendance() {
 // --- EXAMS ---
 export function useExams() {
   return useQuery({
-    queryKey: [api.exams.list.path],
-    queryFn: async () => {
-      const res = await fetch(api.exams.list.path, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch exams");
-      return api.exams.list.responses[200].parse(await res.json());
+    queryKey: ["exams"],
+    queryFn: async () => await mockApi.list("exams"),
+  });
+}
+
+export function useCreateExam() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (data: Omit<Exam, "id">) => {
+      const id = `ex_${Date.now()}`;
+      return await mockApi.create("exams", { id, ...data });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["exams"] });
+      toast({ title: "Success", description: "Exam created" });
     },
   });
 }
@@ -51,33 +171,35 @@ export function useExams() {
 // --- MARKS ---
 export function useMarks() {
   return useQuery({
-    queryKey: [api.marks.list.path],
-    queryFn: async () => {
-      const res = await fetch(api.marks.list.path, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch marks");
-      return api.marks.list.responses[200].parse(await res.json());
-    },
+    queryKey: ["marks"],
+    queryFn: async () => await mockApi.list("marks"),
   });
 }
 
-export function useRecordMark() {
+export function useCreateMark() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
   return useMutation({
-    mutationFn: async (data: InsertMark) => {
-      const res = await fetch(api.marks.record.path, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to record mark");
-      return api.marks.record.responses[201].parse(await res.json());
+    mutationFn: async (data: Omit<Mark, "id">) => {
+      const id = `m_${Date.now()}`;
+      return await mockApi.create("marks", { id, ...data });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [api.marks.list.path] });
+      queryClient.invalidateQueries({ queryKey: ["marks"] });
       toast({ title: "Success", description: "Mark recorded" });
     },
   });
+}
+
+// Get active academic year
+export function useActiveAcademicYear() {
+  const { data: years } = useAcademicYears();
+  return years?.find(y => y.is_active);
+}
+
+// Get active term
+export function useActiveTerm() {
+  const { data: terms } = useTerms();
+  return terms?.find(t => t.is_active);
 }

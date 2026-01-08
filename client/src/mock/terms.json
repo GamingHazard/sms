@@ -1,0 +1,5 @@
+[
+  {"id": "t1_2025", "academic_year_id": "2025", "name": "Term 1", "start_date": "2025-01-01", "end_date": "2025-03-31", "is_active": false},
+  {"id": "t2_2025", "academic_year_id": "2025", "name": "Term 2", "start_date": "2025-04-01", "end_date": "2025-07-31", "is_active": false},
+  {"id": "t3_2025", "academic_year_id": "2025", "name": "Term 3", "start_date": "2025-08-01", "end_date": "2025-12-31", "is_active": true}
+]
