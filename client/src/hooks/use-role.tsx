@@ -18,6 +18,7 @@ interface RoleContextType {
   canViewAttendance: boolean;
   canViewReports: boolean;
   canViewSettings: boolean;
+  canViewDashboard: boolean;
   permissions: {
     students: { view: boolean; edit: boolean };
     fees: { view: boolean; edit: boolean };
@@ -93,6 +94,7 @@ export function RoleProvider({ children }: { children: ReactNode }) {
   const canViewAttendance = permissions.attendance.view;
   const canViewReports = permissions.reports.view;
   const canViewSettings = permissions.settings.view;
+  const canViewDashboard = ["admin", "head_teacher", "bursar"].includes(role);
 
   return (
     <RoleContext.Provider
@@ -106,6 +108,7 @@ export function RoleProvider({ children }: { children: ReactNode }) {
         canViewAttendance,
         canViewReports,
         canViewSettings,
+        canViewDashboard,
         permissions,
       }}
     >

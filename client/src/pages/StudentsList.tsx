@@ -65,13 +65,13 @@ export default function StudentsList() {
   const deleteStudent = useDeleteStudent();
 
   // Filter Logic
-  // const filteredStudents = students?.filter(
-  //   (student) =>
-  //     student?.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //     student?.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //     student?.admissionNo.includes(searchTerm)
-  // );
-  const filteredStudents: any = [];
+  const filteredStudents = students?.filter(
+    (student) =>
+      student?.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student?.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student?.admissionNo?.includes(searchTerm)
+  );
+  // const filteredStudents: any = [];
 
   return (
     <div className="space-y-6">
@@ -153,8 +153,8 @@ export default function StudentsList() {
                           <AvatarImage src={student.photo} />
                         ) : null}
                         <AvatarFallback className="bg-primary/10 text-primary text-xs">
-                          {student.firstName[0]}
-                          {student.lastName[0]}
+                          {student.firstName?.[0] || "?"}
+                          {student.lastName?.[0] || ""}
                         </AvatarFallback>
                       </Avatar>
                     </TableCell>
@@ -163,7 +163,8 @@ export default function StudentsList() {
                     </TableCell>
                     <TableCell>
                       <div className="font-medium text-slate-900">
-                        {student.firstName} {student.lastName}
+                        {student.firstName || "Unknown"}{" "}
+                        {student.lastName || "Student"}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -223,7 +224,7 @@ export default function StudentsList() {
                                     "Are you sure you want to delete this record?"
                                   )
                                 ) {
-                                  deleteStudent.mutate(student.id);
+                                  deleteStudent.mutate(student?.id);
                                 }
                               }}
                             >

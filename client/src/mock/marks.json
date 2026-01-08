@@ -1,3 +1,10 @@
 [
-  {"id":"m1","student_id":"s002","subject_id":"sub01","exam_id":"ex2026mid","score":78}
+  {"id":"m1","studentId":2,"subjectId":"sub01","examId":"ex2026mid","score":78},
+  {"id":"m2","studentId":2,"subjectId":"sub02","examId":"ex2026mid","score":85},
+  {"id":"m3","studentId":5,"subjectId":"sub01","examId":"ex2026mid","score":92},
+  {"id":"m4","studentId":5,"subjectId":"sub02","examId":"ex2026mid","score":88},
+  {"id":"m5","studentId":6,"subjectId":"sub01","examId":"ex2026mid","score":76},
+  {"id":"m6","studentId":6,"subjectId":"sub02","examId":"ex2026mid","score":82},
+  {"id":"m7","studentId":7,"subjectId":"sub01","examId":"ex2026mid","score":89},
+  {"id":"m8","studentId":7,"subjectId":"sub02","examId":"ex2026mid","score":91}
 ]

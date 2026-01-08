@@ -1,30 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-// Local lightweight student type for client-only mock flows.
-type InsertStudent = {
-  id?: string;
-  admission_no?: string;
-  first_name?: string;
-  last_name?: string;
-  level_id?: string;
-  grade_id?: string;
-  stream_id?: string | null;
-  dob?: string;
-  gender?: string;
-  status?: string;
-  photo?: string;
-  [key: string]: any;
-};
+import { type InsertStudent } from "@shared/routes";
 import { useToast } from "@/hooks/use-toast";
 import { mockApi } from "@/lib/mockApi";
 
 // Fetch all students
 export function useStudents() {
   return useQuery({
-    queryKey: ["api.students.list.path"],
+    queryKey: ["api.students.list.path", "v2"], // Added version to force refresh
     queryFn: async () => {
       // use mock API for client-only demo
       return await mockApi.list("students");
     },
+    staleTime: 0, // Don't cache
+    gcTime: 0, // Don't keep in cache
   });
 }
 
@@ -52,7 +40,7 @@ export function useCreateStudent() {
       return await mockApi.create("students", item);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["api.students.list.path"] });
+      queryClient.invalidateQueries({ queryKey: ["api.students.list.path", "v2"] });
       toast({ title: "Success", description: "Student enrolled successfully" });
     },
     onError: (err) => {
@@ -71,7 +59,7 @@ export function useUpdateStudent() {
       return await mockApi.update("students", String(id), updates as any);
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["api.students.list.path"] });
+      queryClient.invalidateQueries({ queryKey: ["api.students.list.path", "v2"] });
       queryClient.invalidateQueries({ queryKey: ["api.students.get.path", variables.id] });
       toast({ title: "Success", description: "Student updated successfully" });
     },
@@ -84,11 +72,11 @@ export function useDeleteStudent() {
   const { toast } = useToast();
 
   return useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: any) => {
       await mockApi.remove("students", String(id));
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["api.students.list.path"] });
+      queryClient.invalidateQueries({ queryKey: ["api.students.list.path", "v2"] });
       toast({ title: "Deleted", description: "Student record removed" });
     },
   });

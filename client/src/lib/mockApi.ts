@@ -25,10 +25,16 @@ function delay(ms = 300) {
 
 async function loadInitial<T extends Item[]>(name: keyof typeof collections): Promise<T> {
   const key = STORAGE_PREFIX + name;
-  const raw = localStorage.getItem(key);
-  if (raw) return JSON.parse(raw) as T;
+  // Force reload from JSON files by clearing localStorage cache
+  localStorage.removeItem(key);
+  // Also clear any other mock data to ensure clean state
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith(STORAGE_PREFIX)) {
+      localStorage.removeItem(key);
+    }
+  });
   const mod = await collections[name]();
-  const data = (mod.default ?? mod) as T;
+  const data = ((mod as any).default ?? mod) as T;
   localStorage.setItem(key, JSON.stringify(data));
   return data;
 }
@@ -41,7 +47,8 @@ async function list(name: keyof typeof collections, opts: { delayMs?: number } =
 async function get(name: keyof typeof collections, id: string) {
   await delay();
   const items = await loadInitial(name);
-  return items.find((i) => i.id === id) ?? null;
+  const numericId = isNaN(Number(id)) ? id : Number(id);
+  return items.find((i) => i.id === numericId) ?? null;
 }
 
 async function create(name: keyof typeof collections, item: Item) {

@@ -1,4 +1,9 @@
 [
-  {"id":"s001","admission_no":"ADM001","first_name":"Aisha","last_name":"Kato","level_id":"kg","grade_id":"baby","stream_id":null,"dob":"2020-05-12","gender":"F","status":"active","photo":"/placeholder.png"},
-  {"id":"s002","admission_no":"ADM002","first_name":"James","last_name":"Okello","level_id":"primary","grade_id":"p2","stream_id":"Blue","dob":"2016-11-30","gender":"M","status":"active","photo":"/placeholder.png"}
+  {"id":1,"admissionNo":"ADM001","firstName":"Aisha","lastName":"Kato","levelId":"kg","gradeId":"baby","streamId":null,"dob":"2020-05-12","gender":"F","status":"active","photo":"/placeholder.png"},
+  {"id":2,"admissionNo":"ADM002","firstName":"James","lastName":"Okello","levelId":"primary","gradeId":"p2","streamId":"Blue","dob":"2016-11-30","gender":"M","status":"active","photo":"/placeholder.png"},
+  {"id":3,"admissionNo":"ADM003","firstName":"Fatuma","lastName":"Nakato","levelId":"kg","gradeId":"middle","streamId":null,"dob":"2019-08-15","gender":"F","status":"active","photo":"/placeholder.png"},
+  {"id":4,"admissionNo":"ADM004","firstName":"David","lastName":"Mugisha","levelId":"kg","gradeId":"top","streamId":null,"dob":"2019-03-22","gender":"M","status":"active","photo":"/placeholder.png"},
+  {"id":5,"admissionNo":"ADM005","firstName":"Sarah","lastName":"Nabwire","levelId":"primary","gradeId":"p1","streamId":"Red","dob":"2017-12-08","gender":"F","status":"active","photo":"/placeholder.png"},
+  {"id":6,"admissionNo":"ADM006","firstName":"Moses","lastName":"Tumushabe","levelId":"primary","gradeId":"p1","streamId":"Blue","dob":"2017-06-14","gender":"M","status":"active","photo":"/placeholder.png"},
+  {"id":7,"admissionNo":"ADM007","firstName":"Grace","lastName":"Akello","levelId":"primary","gradeId":"p2","streamId":"Red","dob":"2016-09-03","gender":"F","status":"active","photo":"/placeholder.png"}
 ]

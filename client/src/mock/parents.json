@@ -1,3 +1,8 @@
 [
-  {"id":"p001","first_name":"Grace","last_name":"Kato","phone":"+256712345678","email":"grace@example.com","students":["s001"]}
+  {"id":"p001","firstName":"Grace","lastName":"Kato","phone":"+256712345678","email":"grace.kato@example.com","students":[1]},
+  {"id":"p002","firstName":"John","lastName":"Okello","phone":"+256774567890","email":"john.okello@example.com","students":[2]},
+  {"id":"p003","firstName":"Ahmed","lastName":"Nakato","phone":"+256701234567","email":"ahmed.nakato@example.com","students":[3]},
+  {"id":"p004","firstName":"Mary","lastName":"Mugisha","phone":"+256756789012","email":"mary.mugisha@example.com","students":[4]},
+  {"id":"p005","firstName":"Peter","lastName":"Nabwire","phone":"+256789012345","email":"peter.nabwire@example.com","students":[5,6]},
+  {"id":"p006","firstName":"Thomas","lastName":"Akello","phone":"+256723456789","email":"thomas.akello@example.com","students":[7]}
 ]

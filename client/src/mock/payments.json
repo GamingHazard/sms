@@ -1,3 +1,7 @@
 [
-  {"id":"pay001","student_id":"s002","amount":100000,"method":"Mobile Money","reference":"MM123","date":"2026-01-06"}
+  {"id":"pay001","studentId":2,"amount":100000,"method":"Mobile Money","reference":"MM123","date":"2026-01-06","term":"Term 1"},
+  {"id":"pay002","studentId":5,"amount":150000,"method":"Bank Transfer","reference":"BT456","date":"2026-01-05","term":"Term 1"},
+  {"id":"pay003","studentId":6,"amount":120000,"method":"Cash","reference":"CASH789","date":"2026-01-04","term":"Term 1"},
+  {"id":"pay004","studentId":7,"amount":180000,"method":"Mobile Money","reference":"MM101","date":"2026-01-03","term":"Term 1"},
+  {"id":"pay005","studentId":1,"amount":80000,"method":"Mobile Money","reference":"MM202","date":"2026-01-02","term":"Term 1"}
 ]

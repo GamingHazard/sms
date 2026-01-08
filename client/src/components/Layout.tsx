@@ -31,12 +31,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
     canViewAttendance,
     canViewReports,
     canViewSettings,
+    canViewDashboard,
   } = useRole();
   const activeYear = useActiveAcademicYear();
   const activeTerm = useActiveTerm();
 
   const navigation = [
-    { name: "Dashboard", href: "/", icon: LayoutDashboard },
+    ...(canViewDashboard
+      ? [{ name: "Dashboard", href: "/", icon: LayoutDashboard }]
+      : []),
     ...(canViewStudents
       ? [{ name: "Students", href: "/students", icon: Users }]
       : []),
